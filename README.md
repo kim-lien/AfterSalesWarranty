@@ -1,246 +1,435 @@
-# QuanLyCayCanh - Hệ thống quản lý cho thuê và bán cây cảnh
+# CỔNG HẬU MÃI VÀ BẢO HÀNH ĐA KÊNH
 
-Hệ thống quản lý cổng hậu mãi và bảo hành đa kênh cho mua thuê cây cảnh.
+## 1. Thông tin đồ án
 
-## Cấu trúc dự án
+| Thông tin | Nội dung |
+|---|---|
+| Họ và tên | Nguyễn Thị Kim Liên |
+| MSSV | 1250080097 |
+| Lớp | 12_ĐH_CNPM1 |
+| Môn học | Phương pháp phát triển phần mềm hướng đối tượng |
+| Giảng viên hướng dẫn | ThS. Phạm Trọng Huynh |
+| Tên đề tài | Cổng hậu mãi và bảo hành đa kênh |
+| Tên thư mục dự án | AfterSalesWarranty |
+| Thời gian thực hiện | Tháng 11/2026 |
 
+## 2. Giới thiệu dự án
+
+**Cổng hậu mãi và bảo hành đa kênh** là Website được xây dựng nhằm hỗ trợ hoạt động kinh doanh, cho thuê cây cảnh và quản lý các dịch vụ chăm sóc khách hàng sau giao dịch.
+
+Đề tài tập trung giải quyết các nghiệp vụ tiếp nhận yêu cầu hỗ trợ, xác minh thông tin khách hàng, kiểm tra quyền lợi bảo hành, phân công nhân viên xử lý, quản lý lịch hẹn chăm sóc cây và theo dõi thời hạn phản hồi, giải quyết yêu cầu theo SLA (Service Level Agreement).
+
+Website được tổ chức theo ba nhóm người dùng gồm **Khách hàng, Nhân viên và Quản trị viên**, giúp quản lý thông tin tập trung, theo dõi tiến độ và hỗ trợ quá trình phối hợp giải quyết yêu cầu.
+
+## 3. Công nghệ và môi trường phát triển
+
+| Thành phần | Công nghệ sử dụng |
+|---|---|
+| Hệ điều hành phát triển | Windows |
+| Công cụ lập trình | Visual Studio Code |
+| Frontend | Next.js, React, TypeScript |
+| Cơ chế định tuyến | Next.js Pages Router |
+| Backend | NestJS, Node.js, TypeScript |
+| Cơ sở dữ liệu | Microsoft SQL Server |
+| Công cụ quản lý dữ liệu | SQL Server Management Studio |
+| Kết nối cơ sở dữ liệu | mssql / msnodesqlv8 |
+| Phương thức xác thực SQL Server | Windows Authentication |
+| Xác thực và phân quyền API | JWT, Guards |
+| Giao tiếp Frontend – Backend | REST API |
+| Quản lý thư viện | npm |
+| Công cụ thiết kế | UML, Figma |
+
+### Yêu cầu môi trường
+
+Máy tính cần cài đặt:
+
+- Node.js và npm.
+- Microsoft SQL Server.
+- SQL Server Management Studio (SSMS).
+- Visual Studio Code hoặc công cụ tương đương.
+- Trình duyệt Web hiện đại.
+
+Phiên bản cụ thể của các công nghệ được xác định từ môi trường phát triển và các tệp `package.json`, `package-lock.json` trong thư mục `frontend` và `backend`.
+
+Có thể kiểm tra Node.js và npm bằng:
+
+```bash
+node -v
+npm -v
 ```
-DAPTTK/
-├── frontend/                 # Next.js 14 Frontend
+
+## 4. Cấu trúc thư mục dự án
+
+```text
+AfterSalesWarranty/
+├── backend/
 │   ├── src/
-│   │   ├── pages/           # Next.js App Router pages
-│   │   ├── components/      # React components
-│   │   ├── services/        # API services
-│   │   ├── contexts/        # React contexts
-│   │   ├── hooks/           # Custom hooks
-│   │   ├── guards/          # Route guards
-│   │   ├── types/           # TypeScript types
-│   │   ├── lib/             # Library configs
-│   │   ├── utils/           # Utility functions
-│   │   └── styles/          # Global styles
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── database/
+│   │   ├── decorators/
+│   │   ├── dto/
+│   │   ├── guards/
+│   │   ├── modules/
+│   │   ├── services/
+│   │   └── main.ts
+│   ├── test/
+│   ├── uploads/
+│   ├── .env
 │   ├── package.json
-│   ├── tsconfig.json
-│   ├── next.config.ts
-│   └── Dockerfile
-├── backend/                  # NestJS Backend
+│   └── README.md
+│
+├── frontend/
+│   ├── public/
+│   │   └── images/
+│   │       ├── banners/
+│   │       ├── categories/
+│   │       └── products/
 │   ├── src/
-│   │   ├── auth/            # Authentication module
-│   │   ├── public/          # Public APIs
-│   │   ├── customer/        # Customer APIs
-│   │   ├── staff/           # Staff APIs
-│   │   ├── admin/           # Admin APIs
-│   │   ├── business/        # Business logic
-│   │   ├── database/        # Database entities
-│   │   ├── common/          # Common utilities
-│   │   ├── integrations/    # External integrations
-│   │   └── redis/           # Redis module
+│   │   ├── api/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── lib/
+│   │   ├── pages/
+│   │   │   ├── admin/
+│   │   │   ├── customer/
+│   │   │   └── staff/
+│   │   ├── styles/
+│   │   └── types/
+│   ├── .env.local
 │   ├── package.json
-│   ├── tsconfig.json
-│   └── Dockerfile
-├── database/                 # SQL Scripts
-│   ├── scripts/
-│   │   ├── 01-create-database.sql
-│   │   ├── 02-create-tables.sql
-│   │   ├── 03-create-constraints.sql
-│   │   ├── 04-create-views.sql
-│   │   ├── 05-create-triggers.sql
-│   │   ├── 06-create-procedures.sql
-│   │   └── 07-seed-data.sql
-│   └── QuanLyCayCanh.sql    # Complete database script
-├── docker/                   # Docker configs
-│   ├── sqlserver/
-│   └── redis/
+│   └── README.md
+│
+├── docker/
 ├── docker-compose.yml
+├── QuanLyCayCanh.sql
 └── README.md
 ```
 
-## Yêu cầu hệ thống
+### Mô tả các thành phần chính
 
-- Node.js 20+
-- Docker & Docker Compose
-- SQL Server 2022 (hoặc dùng Docker)
-- Redis 7 (hoặc dùng Docker)
+| Thư mục / Tệp | Chức năng |
+|---|---|
+| `backend/` | Phát triển API, xác thực, xử lý nghiệp vụ và kết nối cơ sở dữ liệu. |
+| `frontend/` | Xây dựng giao diện và các chức năng tương tác với người dùng. |
+| `docker/` | Chứa các thành phần cấu hình Docker của dự án. |
+| `docker-compose.yml` | Tệp cấu hình Docker Compose. |
+| `QuanLyCayCanh.sql` | Script khởi tạo cơ sở dữ liệu SQL Server. |
+| `backend/README.md` | Hướng dẫn chi tiết về Backend. |
+| `frontend/README.md` | Hướng dẫn chi tiết về Frontend. |
 
-## Cách chạy dự án
+Các thư mục `node_modules`, `dist` và `.next` có thể được tạo trong quá trình cài đặt, biên dịch và chạy ứng dụng.
 
-### 1. Chạy với Docker Compose (Khuyên dùng)
+## 5. Nội dung đã thực hiện
 
-```bash
-# Clone project
-cd DAPTTK
+### 5.1. Phân tích và thiết kế
 
-# Chạy tất cả services
-docker-compose up -d
+- Khảo sát, xác định yêu cầu và phân tích nghiệp vụ.
+- Xác định các nhóm người dùng và chức năng tương ứng.
+- Xây dựng sơ đồ Use Case, Class Diagram, Activity Diagram và Sequence Diagram.
+- Thiết kế cơ sở dữ liệu SQL Server.
+- Thiết kế giao diện phục vụ khách hàng, nhân viên và quản trị viên.
 
-# Xem logs
-docker-compose logs -f
+### 5.2. Chức năng khách hàng
 
-# Dừng services
-docker-compose down
+- Đăng ký và đăng nhập tài khoản.
+- Xem thông tin, mua hoặc thuê cây cảnh.
+- Theo dõi đơn mua, đơn thuê.
+- Gửi yêu cầu hậu mãi hoặc bảo hành.
+- Cung cấp thông tin và hình ảnh liên quan đến yêu cầu.
+- Theo dõi trạng thái, kết quả xử lý và lịch hẹn chăm sóc cây.
+
+### 5.3. Chức năng nhân viên
+
+- Xem danh sách yêu cầu được phân công.
+- Kiểm tra thông tin và xác minh điều kiện hỗ trợ.
+- Cập nhật kết quả xử lý bảo hành.
+- Ghi nhận tiến độ và kết quả hỗ trợ hậu mãi.
+- Theo dõi, cập nhật lịch hẹn chăm sóc cây.
+- Kiểm tra thời hạn phản hồi và xử lý theo SLA.
+
+### 5.4. Chức năng quản trị viên
+
+- Theo dõi tổng quan hoạt động hậu mãi và bảo hành.
+- Quản lý danh sách và thông tin chi tiết yêu cầu.
+- Phân công hoặc thay đổi nhân viên phụ trách.
+- Theo dõi tiến độ giải quyết và lịch sử xử lý.
+- Quản lý lịch hẹn chăm sóc cây.
+- Giám sát tình trạng SLA và các yêu cầu quá hạn.
+
+## 6. Cơ sở dữ liệu
+
+Dự án sử dụng Microsoft SQL Server với cơ sở dữ liệu:
+
+```text
+QuanLyCayCanh
 ```
 
-Sau khi chạy, truy cập:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:3001
-- API Docs (Swagger): http://localhost:3001/api
+Tệp SQL được đặt tại:
 
-### 2. Chạy thủ công (Development)
+```text
+AfterSalesWarranty/QuanLyCayCanh.sql
+```
 
-#### Backend
+Cơ sở dữ liệu gồm **26 bảng**, phục vụ các nhóm nghiệp vụ:
+
+- Quản lý tài khoản, khách hàng và nhân viên.
+- Quản lý danh mục, sản phẩm và tồn kho.
+- Quản lý đơn mua, đơn thuê và thanh toán.
+- Quản lý chính sách dịch vụ.
+- Quản lý yêu cầu hậu mãi và bảo hành.
+- Quản lý lịch hẹn chăm sóc cây.
+- Lưu trữ lịch sử trạng thái và tương tác hỗ trợ.
+
+Các bảng được liên kết bằng khóa chính, khóa ngoại và những ràng buộc dữ liệu nhằm hỗ trợ quá trình lưu trữ, truy xuất và xử lý nghiệp vụ.
+
+## 7. Hướng dẫn cài đặt và chạy dự án
+
+### Bước 1. Chuẩn bị mã nguồn
+
+Mở thư mục `AfterSalesWarranty` bằng Visual Studio Code.
+
+Kiểm tra các thành phần:
+
+- Thư mục `backend`.
+- Thư mục `frontend`.
+- Tệp `QuanLyCayCanh.sql`.
+
+### Bước 2. Khởi tạo cơ sở dữ liệu
+
+1. Mở SQL Server Management Studio.
+2. Kết nối đến SQL Server.
+3. Chọn **File → Open → File**.
+4. Mở tệp `QuanLyCayCanh.sql`.
+5. Thực thi script SQL để khởi tạo cơ sở dữ liệu.
+6. Kiểm tra các bảng và dữ liệu đã được tạo.
+
+**Lưu ý:** Nếu cơ sở dữ liệu đã tồn tại, cần kiểm tra script trước khi thực thi để tránh ảnh hưởng dữ liệu hiện có.
+
+### Bước 3. Cấu hình kết nối Backend
+
+Kiểm tra hai tệp:
+
+```text
+backend/.env
+backend/src/config/DatabaseConfig.ts
+```
+
+Điều chỉnh thông tin kết nối theo SQL Server trên máy sử dụng:
+
+- Tên máy chủ hoặc SQL Server instance.
+- Tên cơ sở dữ liệu `QuanLyCayCanh`.
+- Phương thức xác thực.
+- Quyền truy cập cơ sở dữ liệu.
+
+Trong môi trường phát triển, dự án sử dụng SQL Server với **Windows Authentication**. Khi chạy trên máy khác, cần bảo đảm tài khoản Windows được cấp quyền truy cập phù hợp.
+
+### Bước 4. Khởi chạy Backend
+
+Mở Terminal thứ nhất tại thư mục `AfterSalesWarranty`.
+
+Thực hiện:
+
 ```bash
 cd backend
-
-# Cài đặt dependencies
 npm install
-
-# Copy environment variables
-cp .env.example .env
-
-# Chỉnh sửa .env với cấu hình database của bạn
-# DB_HOST=localhost
-# DB_PORT=1433
-# DB_USERNAME=sa
-# DB_PASSWORD=YourStrong@Passw0rd
-# DB_NAME=QuanLyCayCanh
-
-# Chạy database (nếu chưa có)
-# Chạy file database/QuanLyCayCanh.sql trên SQL Server
-
-# Chạy development server
 npm run start:dev
 ```
 
-#### Frontend
+Giữ Terminal hoạt động để Backend tiếp nhận các yêu cầu từ Frontend.
+
+Địa chỉ và cổng Backend được xác định theo cấu hình trong `backend/src/main.ts` và tệp `.env`.
+
+### Bước 5. Cấu hình và chạy Frontend
+
+Mở Terminal thứ hai tại thư mục `AfterSalesWarranty`.
+
+Thực hiện:
+
 ```bash
 cd frontend
-
-# Cài đặt dependencies
 npm install
-
-# Copy environment variables
-cp .env.example .env.local
-
-# Chạy development server
 npm run dev
 ```
 
-### 3. Khởi tạo Database
+Trước khi kiểm tra chức năng, bảo đảm địa chỉ API trong `frontend/.env.local` phù hợp với địa chỉ Backend.
 
-Chạy file SQL theo thứ tự trong `database/scripts/` hoặc chạy file `database/QuanLyCayCanh.sql` hoàn chỉnh:
+Sau khi Frontend khởi chạy, mở trình duyệt và truy cập:
 
-```bash
-# Trên SQL Server Management Studio hoặc sqlcmd
-sqlcmd -S localhost -U sa -P 'YourStrong@Passw0rd' -i database/QuanLyCayCanh.sql
+**http://localhost:3000**
+
+Đây là địa chỉ mặc định của Next.js. Nếu Terminal hiển thị cổng khác, sử dụng địa chỉ thực tế.
+
+### Bước 6. Kiểm tra hoạt động
+
+Kiểm tra lần lượt:
+
+1. SQL Server đang chạy.
+2. Backend đã kết nối với cơ sở dữ liệu.
+3. Frontend đã khởi chạy thành công.
+4. Trang đăng nhập hoạt động.
+5. Các chức năng truy xuất và cập nhật dữ liệu có thể giao tiếp với Backend.
+
+**Phương thức chạy chính:** Khởi chạy thủ công bằng npm. Tệp Docker Compose hiện chưa được xác nhận có cấu hình đầy đủ nên không sử dụng làm hướng dẫn chạy mặc định.
+
+## 8. Tài khoản kiểm thử
+
+Các tài khoản được sử dụng để giảng viên kiểm tra chức năng:
+
+| Vai trò | Tên đăng nhập | Mật khẩu |
+|---|---|---|
+| Khách hàng | `tu1` | `123` |
+| Quản trị viên | `nhai1` | `1` |
+| Nhân viên | `nhai2` | `2` |
+| Nhân viên | `nhai3` | `3` |
+
+Các tài khoản trên chỉ phục vụ môi trường kiểm thử đồ án và cần có sẵn trong cơ sở dữ liệu được bàn giao.
+
+Không sử dụng mật khẩu thử nghiệm khi triển khai ứng dụng công khai.
+
+## 9. Hướng dẫn giảng viên kiểm tra chức năng
+
+### 9.1. Kiểm tra tài khoản khách hàng
+
+Sử dụng tài khoản:
+
+```text
+Username: tu1
+Password: 123
 ```
 
-## Tài khoản mặc định (sau khi seed data)
+Các bước kiểm tra:
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@quanlycaycanh.test | 123456 |
-| Nhân viên | nhanvien1@quanlycaycanh.test | 123456 |
-| Khách hàng | khach1@quanlycaycanh.test | 123456 |
+1. Truy cập Website và đăng nhập.
+2. Xem danh sách sản phẩm cây cảnh.
+3. Kiểm tra thông tin đơn mua hoặc thuê.
+4. Truy cập chức năng hỗ trợ khách hàng.
+5. Tạo yêu cầu hậu mãi hoặc bảo hành.
+6. Theo dõi trạng thái và kết quả xử lý.
+7. Xem thông tin lịch hẹn nếu có.
 
-## Tính năng chính
+### 9.2. Kiểm tra tài khoản quản trị viên
 
-### Khách hàng
-- Xem sản phẩm (cây cảnh) với giá mua, giá thuê, giá cọc
-- Giỏ hàng hỗ trợ cả mua và thuê trong cùng một giỏ
-- Chọn ngày thuê, gói thuê (Cơ bản/Cao cấp)
-- Chọn dịch vụ đi kèm (bảo hành, chăm sóc, tư vấn)
-- Thanh toán đa phương thức (COD, VNPay, MoMo, Chuyển khoản)
-- Theo dõi đơn hàng, đơn thuê
-- Tạo yêu cầu hậu mãi, bảo hành, đổi trả đa kênh
-- Xem lịch sử bảo hành, lịch chăm sóc
+Sử dụng tài khoản:
 
-### Nhân viên
-- Quản lý đơn hàng (xác nhận, giao hàng)
-- Quản lý đơn thuê (bàn giao, kiểm tra, quyết toán)
-- Xử lý yêu cầu hậu mãi, bảo hành
-- Lên lịch chăm sóc cây
-- Theo dõi SLA
-
-### Quản trị viên
-- Quản lý người dùng, phân quyền
-- Quản lý sản phẩm, danh mục, kho, tồn kho
-- Quản lý khuyến mãi, chính sách dịch vụ
-- Báo cáo doanh thu, thống kê
-- Cài đặt hệ thống
-
-## Database Schema
-
-Database được thiết kế theo chuẩn SQL Server với các bảng chính:
-- **VaiTro, NguoiDung, KhachHang, NhanVien** - Quản lý người dùng
-- **SanPham, DanhMuc, TonKho, Kho** - Quản lý sản phẩm & kho
-- **GioHang, ChiTietGioHang** - Giỏ hàng (hỗ trợ mua & thuê)
-- **DonHang, ChiTietDonHang** - Đơn hàng mua
-- **DonThue, ChiTietDonThue** - Đơn thuê (có hợp đồng, cọc, quyết toán)
-- **ThanhToan** - Thanh toán đa loại (mua, thuê, cọc, dịch vụ, bồi thường)
-- **YeuCauHauMai, BaoHanh, LichHenChamSoc** - Hậu mãi & bảo hành đa kênh
-- **KhuyenMai, ChiTietKhuyenMai, ChinhSachDichVu** - Khuyến mãi & chính sách
-- **DanhGia, KenhHoTro** - Đánh giá & kênh hỗ trợ
-
-## Công nghệ sử dụng
-
-### Frontend
-- Next.js 14 (App Router)
-- React 18
-- TypeScript
-- Tailwind CSS
-- Axios, SWR, Zustand
-- React Hook Form + Zod
-
-### Backend
-- NestJS 10
-- TypeORM
-- SQL Server (mssql)
-- Redis (caching, session)
-- JWT Authentication
-- Passport.js
-- Class Validator + Transformer
-
-## Triển khai Production
-
-```bash
-# Build images
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
-
-# Deploy
-docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```text
+Username: nhai1
+Password: 1
 ```
 
-### Biến môi trường Production quan trọng
+Các bước kiểm tra:
 
-```env
-# Backend
-NODE_ENV=production
-JWT_SECRET=your-very-secure-random-secret-key
-DB_HOST=your-sql-server-host
-DB_PASSWORD=your-secure-db-password
-REDIS_HOST=your-redis-host
+1. Đăng nhập vào khu vực quản trị.
+2. Xem trang tổng quan hậu mãi.
+3. Tra cứu danh sách yêu cầu.
+4. Xem chi tiết yêu cầu của khách hàng.
+5. Phân công nhân viên phụ trách xử lý.
+6. Theo dõi trạng thái yêu cầu và lịch hẹn.
+7. Kiểm tra tình trạng SLA phản hồi, xử lý.
 
-# Frontend
-NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+### 9.3. Kiểm tra tài khoản nhân viên
+
+Sử dụng một trong hai tài khoản:
+
+```text
+Username: nhai2
+Password: 2
 ```
 
-## Cấu trúc Database quan trọng
+Hoặc:
 
-Xem file `database/QuanLyCayCanh.sql` để hiểu đầy đủ schema. Các điểm nổi bật:
+```text
+Username: nhai3
+Password: 3
+```
 
-1. **Sản phẩm** có 3 loại: `Bán`, `Thuê`, `Bán và thuê` - mỗi loại yêu cầu giá tương ứng
-2. **Giỏ hàng** hỗ trợ trộn lẫn mua và thuê, thuê cần chọn ngày bắt đầu/kết thúc
-3. **Đơn thuê** có quy trình: Xác nhận → Bàn giao → Đang thuê → Chờ trả → Kiểm tra → Quyết toán
-4. **Hậu mãi/Bảo hành** liên kết chặt chẽ với đơn hàng/đơn thuê và chính sách dịch vụ
-5. **SLA** được tính toán tự động qua view `vwQuyenLoiYeuCau`
-6. **Quyết toán thuê** tự động tính tiền thuê thực tế, bồi thường, hoàn cọc qua stored procedure `spQuyetToanThue`
+Các bước kiểm tra:
 
-## Đóng góp
+1. Đăng nhập vào khu vực nhân viên.
+2. Xem danh sách yêu cầu được phân công.
+3. Mở chi tiết hồ sơ để xác minh thông tin.
+4. Thực hiện cập nhật tiến độ xử lý.
+5. Ghi nhận kết quả hậu mãi hoặc bảo hành.
+6. Theo dõi và cập nhật lịch hẹn.
+7. Kiểm tra danh sách SLA.
 
-1. Fork repository
-2. Tạo feature branch
-3. Commit changes
-4. Push và tạo Pull Request
+### 9.4. Quy trình kiểm tra tổng thể
 
-## License
+Giảng viên có thể kiểm tra luồng nghiệp vụ chính theo trình tự:
 
-MIT License - Xem file LICENSE để biết thêm chi tiết.
+**Khách hàng tạo yêu cầu → Quản trị viên phân công nhân viên → Nhân viên xác minh → Xử lý hậu mãi hoặc bảo hành → Cập nhật kết quả → Khách hàng theo dõi tiến độ.**
+
+Quy trình này giúp kiểm tra sự phối hợp giữa các vai trò, khả năng trao đổi dữ liệu giữa Frontend và Backend, cũng như việc lưu trữ thông tin trong SQL Server.
+
+## 10. Kết quả đạt được
+
+Đề tài đã xây dựng Website phục vụ quản lý hoạt động mua, thuê cây cảnh và các nghiệp vụ hậu mãi, bảo hành.
+
+Các kết quả chính:
+
+- Xây dựng giao diện theo ba nhóm người dùng.
+- Thiết kế cơ sở dữ liệu SQL Server.
+- Phát triển Frontend sử dụng Next.js và TypeScript.
+- Phát triển Backend sử dụng NestJS và TypeScript.
+- Kết nối Frontend với Backend thông qua API.
+- Xây dựng chức năng tiếp nhận và theo dõi yêu cầu hỗ trợ.
+- Hỗ trợ xác minh, phân công và xử lý yêu cầu.
+- Quản lý lịch hẹn chăm sóc cây.
+- Theo dõi thời hạn phản hồi và xử lý theo SLA.
+
+## 11. Lỗi thường gặp và cách khắc phục
+
+| Vấn đề | Nguyên nhân có thể gặp | Cách khắc phục |
+|---|---|---|
+| Không kết nối được SQL Server | Sai thông tin máy chủ hoặc thiếu quyền truy cập | Kiểm tra SQL Server, cấu hình kết nối và Windows Authentication. |
+| Backend không khởi động | Thiếu thư viện hoặc lỗi cấu hình | Kiểm tra Terminal và thực hiện `npm install`. |
+| Frontend không gọi được API | Sai địa chỉ API hoặc Backend chưa chạy | Kiểm tra `.env.local` và trạng thái Backend. |
+| Không đăng nhập được | Sai tài khoản hoặc dữ liệu chưa được khởi tạo | Kiểm tra tài khoản thử nghiệm và dữ liệu SQL Server. |
+| Không hiển thị sản phẩm hoặc yêu cầu | Lỗi kết nối API hoặc dữ liệu không tồn tại | Kiểm tra API, Backend và cơ sở dữ liệu. |
+| Không truy cập được trang quản lý | Tài khoản không có quyền phù hợp | Kiểm tra vai trò và thông tin đăng nhập. |
+| Không chạy được lệnh npm | Node.js hoặc thư viện chưa phù hợp | Kiểm tra phiên bản Node.js và cài đặt lại dependencies. |
+| Cổng ứng dụng đã được sử dụng | Có chương trình khác sử dụng cùng cổng | Dừng chương trình đang chiếm cổng hoặc thay đổi cấu hình. |
+
+Bảng trên là hướng dẫn xử lý sự cố khi chạy lại dự án, không thay thế cho nhật ký lỗi và kết quả kiểm thử thực tế.
+
+## 12. Hạn chế
+
+Chức năng quản lý tương tác đa kênh chưa được hoàn thiện đầy đủ. Việc tích hợp và đồng bộ tự động giữa Website, Email, điện thoại và Chat chưa được triển khai hoàn chỉnh.
+
+Ứng dụng hiện chủ yếu được phát triển và chạy thử trên môi trường máy tính cá nhân, chưa có thông tin xác nhận việc triển khai chính thức trên máy chủ Production.
+
+## 13. Hướng phát triển
+
+- Hoàn thiện việc tích hợp và đồng bộ các kênh hỗ trợ khách hàng.
+- Phát triển chức năng thông báo tự động về tiến độ và thời hạn SLA.
+- Tối ưu hiệu suất truy xuất và xử lý dữ liệu.
+- Nâng cao khả năng bảo mật và quản lý quyền truy cập.
+- Cải thiện trải nghiệm sử dụng trên thiết bị di động.
+- Bổ sung kiểm thử tự động và hoàn thiện quy trình triển khai.
+
+## 14. Hướng dẫn kiểm tra và bàn giao mã nguồn
+
+Khi bàn giao, cần bảo đảm có đầy đủ:
+
+- Thư mục `backend/` chứa mã nguồn NestJS.
+- Thư mục `frontend/` chứa mã nguồn Next.js.
+- Tệp `QuanLyCayCanh.sql` phục vụ khởi tạo cơ sở dữ liệu.
+- Các tệp `package.json` và `package-lock.json`.
+- Tài liệu hướng dẫn `README.md`.
+
+Các tệp cấu hình môi trường phải được điều chỉnh phù hợp với máy kiểm tra. Không công khai mật khẩu cơ sở dữ liệu, khóa JWT hoặc thông tin nhạy cảm.
+
+Có thể tham khảo thêm:
+
+- **Backend:** `backend/README.md`.
+- **Frontend:** `frontend/README.md`.
+
+---
+
+**Sinh viên thực hiện:** Nguyễn Thị Kim Liên
+
+**MSSV:** 1250080097
+
+**Giảng viên hướng dẫn:** ThS. Phạm Trọng Huynh
+
+**Đề tài:** Cổng hậu mãi và bảo hành đa kênh
